@@ -1,0 +1,32 @@
+### GETS
+### Local arrival
+GET http://localhost:3000/
+
+### Local games all
+GET http://localhost:3000/games
+
+### Local wish all
+GET http://localhost:3000/wish
+
+### local games one
+GET http://localhost:3000/games/68cc858faf9e3a6d5cde7c3a
+
+### local wish one
+GET http://localhost:3000/wish/68cc844eaf9e3a6d5cde7c38
+
+
+
+### POSTS
+### Local post game
+POST http://localhost:3000/games HTTP/1.1
+content-type: application/json
+
+{
+    "Name": "Satisfactory",
+    "Rating": "Overwhelmingly Positive",
+    "Developer": "Coffee Stain Studios",
+    "Publisher": "Coffee Stain Publishing",
+    "Genre": "Base Building, Crafting, Open World",
+    "Hours": "150.2",
+    "POV": "First"
+}
