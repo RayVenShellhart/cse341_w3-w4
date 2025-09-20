@@ -91,15 +91,20 @@ const updateGame = async (req, res) => {
     const response = await mongodb
       .getDatabase()
       .db()
-      .collection('game')
-      .replaceOne({ _id: gameId }, game);
+      .collection('games')
+    .updateOne({ _id: gameId }, {$set: game });
 
     if (response.modifiedCount > 0) {
-      return res.status(204).send();
+        const updatedGame = await mongodb
+          .getDatabase()
+          .db()
+          .collection('games')
+          .findOne({ _id: gameId });
+      
+          return res.status(200).json(updatedGame);
     } else {
       res
-        .status(404)
-        .json({ message: 'No game found to update or no changes made' });
+        .status(404).json({ message: 'No game found to update or no changes made' });
     }
   } catch (err) {
     res.status(500).json({ message: err.message || 'Error updating game' });

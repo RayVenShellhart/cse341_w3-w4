@@ -72,7 +72,7 @@ const createWish = async (req, res) => {
 const updateWish = async (req, res) => {
   //#swagger.tag=['Wish']
   if (!ObjectId.isValid(req.params.id)) {
-    return res.status(400).json('Must use valid id to update');
+    return res.status(400).json({ message: 'Must use valid id to update' });
   }
 
   const wishId = new ObjectId(req.params.id);
@@ -90,14 +90,19 @@ const updateWish = async (req, res) => {
       .getDatabase()
       .db()
       .collection('wishlist')
-      .replaceOne({ _id: wishId }, wish);
+      .updateOne({ _id: wishId }, { $set: wish });
 
     if (response.modifiedCount > 0) {
-      return res.status(204).send();
+      // Fetch and return the updated document
+      const updatedWish = await mongodb
+        .getDatabase()
+        .db()
+        .collection('wishlist')
+        .findOne({ _id: wishId });
+
+      return res.status(200).json(updatedWish);
     } else {
-      res
-        .status(404)
-        .json({ message: 'No wish found to update or no changes made' });
+      res.status(404).json({ message: 'No wish found to update or no changes made' });
     }
   } catch (err) {
     res.status(500).json({ message: err.message || 'Error updating wish' });
